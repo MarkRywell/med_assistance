@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
           child: ListView.builder(
               itemCount: patient.length,
               itemBuilder: (context, index) {
+
+
                 return Card(
                   margin: const EdgeInsets.only(top: 1, bottom: 0.6),
                   child: Slidable(
@@ -59,6 +61,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ), child: ListTile(
                       title: const Text("Mark Gaje"),
+                      trailing: const Icon(Icons.arrow_back_ios),
                       onTap: () {
                           Navigator.push(context,
                           MaterialPageRoute(
