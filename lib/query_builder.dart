@@ -52,6 +52,16 @@ class QueryBuilder {
     }) : [];
   }
 
+  Future <Patient> fetchPatient () async {
+
+    Database db = await instance.getDatabase();
+    
+    final List<Map<String, Object?>> map = await db.rawQuery('SELECT * FROM patients ORDER BY id DESC LIMIT 1');
+
+    return Patient.fromMapObject(map[0]);
+
+  }
+
   Future addPatient(Patient patient) async {
     Database db = await instance.getDatabase();
     

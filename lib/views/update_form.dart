@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:med_assistance/models/patient.dart';
-import 'package:med_assistance/query_builder.dart';
 
 class UpdateForm extends StatefulWidget {
 
@@ -165,7 +164,7 @@ class _UpdateFormState extends State<UpdateForm> {
                         height: 40,
                         width: size.width,
                         child: ElevatedButton(
-                          onPressed: () async {
+                          onPressed: () {
 
                             if(formKey.currentState!.validate()) {
                               Patient updatedPatient = Patient(
@@ -175,8 +174,6 @@ class _UpdateFormState extends State<UpdateForm> {
                                   dateAdmitted: date.toString(),
                                   diseaseDetails: diseaseController.text,
                                   medicines: medicinesController.text);
-
-                              await QueryBuilder.instance.updatePatient(updatedPatient);
 
                               Navigator.pop(context, updatedPatient);
 

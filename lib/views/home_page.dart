@@ -17,11 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
 
-  List patientsList = [
-    {
-
-    }
-  ];
+  List patientsList = [];
 
   late AnimationController animationController;
   late var colorTween;
@@ -56,11 +52,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       return;
     }
 
+    Patient fetchedPatient = await QueryBuilder.instance.fetchPatient();
+
+    setState(() {
+      patientsList.add(fetchedPatient);
+    });
+
     ScaffoldMessenger.of(context).showSnackBar(
         showStatus(color: Colors.lightBlueAccent, text: "Added"));
   }
 
-  updateStatus(Patient patient) async {
+  updateStatus(Patient patient, int index) async {
     var updatedPatient = await Navigator.push(context,
     MaterialPageRoute(
       builder: (context) => UpdateForm(patient: patient)
@@ -69,6 +71,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if (updatedPatient == null){
       return;
     }
+
+    int status = await QueryBuilder.instance.updatePatient(updatedPatient);
+
+    if (status == 0) {
+      return;
+    }
+
+    setState(() {
+      patientsList[index] = updatedPatient;
+    });
 
     ScaffoldMessenger.of(context).showSnackBar(
         showStatus(color: Colors.greenAccent, text: "Updated"));
@@ -99,6 +111,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: FutureBuilder(
         future: QueryBuilder.instance.patients(),
         builder: (context, snapshot) {
+
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               return Center(
@@ -128,7 +141,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               );
             }
             if (snapshot.hasData) {
-              // patientsList.isEmpty ? patientsList = snapshot.data! : null;
+
+              patientsList.isEmpty ? patientsList = snapshot.data! : null;
 
               return SlidableAutoCloseBehavior(
                 closeWhenOpened: true,
@@ -138,9 +152,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   thickness: 8.0,
                   radius: const Radius.circular(5),
                   child: ListView.builder(
-                      itemCount: snapshot.data!.length,
+                      itemCount: patientsList.length,
                       itemBuilder: (context, index) {
-                        final patient = snapshot.data![index];
+                        final patient = patientsList[index];
 
                         return Card(
                           margin: const EdgeInsets.only(top: 1, bottom: 0.6),
@@ -156,7 +170,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                   label: "Update",
                                   onPressed: (context) =>
                                         setState(() {
-                                          updateStatus(patient);
+                                          updateStatus(patient, index);
                                         })
                                 ),
                                 SlidableAction(
@@ -164,10 +178,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                   backgroundColor: Colors.red,
                                   foregroundColor: Colors.white,
                                   label: "Delete",
-                                  onPressed: (context) =>
-                                      setState(() {
-                                        deleteStatus(patient.id!);
-                                      }),
+                                  onPressed: (context) {
+                                    deleteStatus(patient.id!);
+                                    setState(() {
+                                      patientsList.removeAt(index);
+                                    });
+                                  }
                                 )
                               ],
                             ), child: ListTile(
@@ -233,9 +249,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           if (newPatient == null) {
             return;
           }
-          setState(() {
-            addStatus(newPatient);
-          });
+          addStatus(newPatient);
 
         },
         child: const Icon(Icons.person_add_alt_sharp),

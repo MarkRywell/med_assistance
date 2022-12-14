@@ -38,4 +38,14 @@ class Patient {
     );
   }
 
+  factory Patient.fromMapObject(Map <String, Object?> json) {
+    return Patient(
+        id: json['id'] as int,
+        name: json['name'] as String,
+        age: json['age'] as int,
+        dateAdmitted: json['dateAdmitted'] as String,
+        diseaseDetails: json['diseaseDetails'] as String,
+        medicines: json['medicines'] as String
+    );
+  }
 }
