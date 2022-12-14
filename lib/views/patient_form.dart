@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:med_assistance/models/patient.dart';
 
 class PatientForm extends StatefulWidget {
 
-  const PatientForm({Key? key}) : super(key: key);
+  final int listLength;
+  const PatientForm({
+    required this.listLength,
+    Key? key}) : super(key: key);
 
   @override
   State<PatientForm> createState() => _PatientFormState();
@@ -14,6 +18,7 @@ class _PatientFormState extends State<PatientForm> {
 
   DateTime date = DateTime.now();
 
+  TextEditingController idController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
 
@@ -56,7 +61,7 @@ class _PatientFormState extends State<PatientForm> {
                         controller: ageController,
                         keyboardType: TextInputType.text,
                         decoration: const InputDecoration(
-                            labelText: "Name",
+                            labelText: "Age",
                             border: OutlineInputBorder()
                         ),
                         validator: (value) {
@@ -141,11 +146,23 @@ class _PatientFormState extends State<PatientForm> {
                     ),
                     const SizedBox(height:50),
                     SizedBox(
-                      height: 40,
+                        height: 40,
                         width: size.width,
                         child: ElevatedButton(
                           onPressed: () {
 
+                            if(formKey.currentState!.validate()) {
+                              Patient newPatient = Patient(
+                                  name: nameController.text,
+                                  age: int.parse(ageController.text),
+                                  dateAdmitted: date.toString(),
+                                  diseaseDetails: diseaseController.text,
+                                  medicines: medicinesController.text);
+
+                              Navigator.pop(context, newPatient);
+
+                              print(newPatient.name);
+                            }
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

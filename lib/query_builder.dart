@@ -27,8 +27,8 @@ class QueryBuilder {
   }
 
   Future onCreate(Database db, int version) async {
-    await db.execute('''
-        CREATE TABLE patients(id INTEGER PRIMARY KEY AUTOINCREMENT,
+    await db.execute('''      
+        CREATE TABLE patients(id INTEGER PRIMARY KEY,
          name TEXT, age INTEGER, dateAdmitted TEXT, diseaseDetails TEXT,
          medicines TEXT)      
     ''');
@@ -54,7 +54,7 @@ class QueryBuilder {
 
   Future addPatient(Patient patient) async {
     Database db = await instance.getDatabase();
-
+    print("working");
     return await db.insert('patients', patient.toMap());
   }
 

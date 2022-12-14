@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:med_assistance/models/patient.dart';
 import 'package:med_assistance/query_builder.dart';
 import 'package:med_assistance/views/patient_details.dart';
 import 'package:med_assistance/views/patient_form.dart';
@@ -14,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
 
-  List patients = [
+  List patientsList = [
     {
 
     }
@@ -76,98 +77,111 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           //         )
           //     );
           //   }
-            if (snapshot.hasData) {
+          if (snapshot.hasData) {
 
-              patients.isEmpty ? patients = snapshot.data! : null;
 
-              SlidableAutoCloseBehavior(
-                closeWhenOpened: true,
-                child: Scrollbar(
-                  trackVisibility: true,
-                  interactive: true,
-                  thickness: 8.0,
-                  radius: const Radius.circular(5),
-                  child: ListView.builder(
-                      itemCount: patients.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.only(top: 1, bottom: 0.6),
-                          child: Slidable(
-                            key: UniqueKey(),
-                            endActionPane: const ActionPane(
-                              motion: StretchMotion(),
-                              children: [
-                                SlidableAction(
-                                  icon: Icons.mode_edit_outlined,
-                                  backgroundColor: Colors.green,
-                                  foregroundColor: Colors.white,
-                                  label: "Update",
-                                  onPressed: null,
-                                ),
-                                SlidableAction(
-                                  icon: Icons.delete,
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  label: "Delete",
-                                  onPressed: null,
-                                )
-                              ],
-                            ), child: ListTile(
-                              title: const Text("Mark Gaje"),
-                              trailing: const Icon(Icons.arrow_back_ios),
-                              onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PatientDetails()
-                                    ));
-                              }
-                          ),
-                          ),
-                        );
-                      }),
-                ),
-              );
-            }
-            return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: const Icon(Icons.error_outline,
-                          size: 100,
-                          color: Colors.redAccent
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text("Database Error: Problem Fetching Data",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            height: 1.5,
-                            fontSize: 20
-                        ),),
-                    )
-                  ],
-                )
+            // patientsList.isEmpty ? patientsList = snapshot.data! : null;
+
+            return SlidableAutoCloseBehavior(
+              closeWhenOpened: true,
+              child: Scrollbar(
+                trackVisibility: true,
+                interactive: true,
+                thickness: 8.0,
+                radius: const Radius.circular(5),
+                child: ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+
+                      final patient = snapshot.data![index];
+
+
+                      return Card(
+                        margin: const EdgeInsets.only(top: 1, bottom: 0.6),
+                        child: Slidable(
+                          key: UniqueKey(),
+                          endActionPane: const ActionPane(
+                            motion: StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                icon: Icons.mode_edit_outlined,
+                                backgroundColor: Colors.green,
+                                foregroundColor: Colors.white,
+                                label: "Update",
+                                onPressed: null,
+                              ),
+                              SlidableAction(
+                                icon: Icons.delete,
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                label: "Delete",
+                                onPressed: null,
+                              )
+                            ],
+                          ), child: ListTile(
+                            title: Text("${patient.name}"),
+                            trailing: const Icon(Icons.arrow_back_ios),
+                            onTap: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PatientDetails()
+                                  ));
+                            }
+                        ),
+                        ),
+                      );
+                    }),
+              ),
             );
-
           }
-          // return Center(
-          //     child: CircularProgressIndicator(
-          //       valueColor: colorTween,
-          //     )
-          // );
+          return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: const Icon(Icons.error_outline,
+                        size: 100,
+                        color: Colors.redAccent
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text("Database Error: Problem Fetching Data",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          height: 1.5,
+                          fontSize: 20
+                      ),),
+                  )
+                ],
+              )
+          );
+
+        }
+        // return Center(
+        //     child: CircularProgressIndicator(
+        //       valueColor: colorTween,
+        //     )
+        // );
         ,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
+        onPressed: () async {
+          Patient newPatient = await Navigator.push(context,
               MaterialPageRoute(
-                builder: (context) => PatientForm(),
+                builder: (context) => PatientForm(listLength: patientsList.length),
               ));
+          if (newPatient == null) {
+            return;
+          }
+
+          print('${newPatient.name} homepage');
+
+          await QueryBuilder.instance.addPatient(newPatient);
+
         },
         child: const Icon(Icons.person_add_alt_sharp),
       ),
