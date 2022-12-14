@@ -85,30 +85,45 @@ class _PatientFormState extends State<PatientForm> {
                         ),
                         child: Row(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Text('${date.month}/${date.day}/${date.year}',
-                                style: const TextStyle(
-                                    fontSize: 16
-                                ),),
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Text('Date Admitted',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black.withOpacity(0.6)
+                                  ),),
+                              ),
                             ),
-                            const VerticalDivider(width: 180),
-                            ElevatedButton(
-                                onPressed: () async {
-                                  DateTime? newDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: date,
-                                      firstDate: DateTime(1900),
-                                      lastDate: DateTime(2100)
-                                  );
-                                  if(newDate == null){
-                                    return;
-                                  }
-                                  setState(() {
-                                    date = newDate;
-                                  });
-                                },
-                                child: const Icon(Icons.calendar_month))
+                            Expanded(
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Text('${date.month}/${date.day}/${date.year}',
+                                  style: const TextStyle(
+                                      fontSize: 16
+                                  ),),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    DateTime? newDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: date,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2100)
+                                    );
+                                    if(newDate == null){
+                                      return;
+                                    }
+                                    setState(() {
+                                      date = newDate;
+                                    });
+                                  },
+                                  child: const Icon(Icons.calendar_month)),
+                            )
                           ],
                         ),
                       ),

@@ -64,4 +64,11 @@ class QueryBuilder {
     return status;
   }
 
+  Future updatePatient(Patient patient) async {
+    Database db = await instance.getDatabase();
+
+    int status = await db.update('patients', patient.toMap(), where: 'id = ?', whereArgs: [patient.id]);
+    return status;
+  }
+
 }
