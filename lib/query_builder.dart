@@ -54,9 +54,14 @@ class QueryBuilder {
 
   Future addPatient(Patient patient) async {
     Database db = await instance.getDatabase();
-    print("working");
+    
     return await db.insert('patients', patient.toMap());
   }
 
+  Future deletePatient(int id) async {
+    Database db = await instance.getDatabase();
+    int status = await db.delete('patients', where: 'id = ?', whereArgs: [id]);
+    return status;
+  }
 
 }

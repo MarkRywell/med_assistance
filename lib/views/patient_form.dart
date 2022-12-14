@@ -161,7 +161,7 @@ class _PatientFormState extends State<PatientForm> {
 
                               Navigator.pop(context, newPatient);
 
-                              print(newPatient.name);
+
                             }
                           },
                           child: Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:med_assistance/models/patient.dart';
 import 'package:med_assistance/query_builder.dart';
 import 'package:med_assistance/views/patient_details.dart';
@@ -23,6 +24,40 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   late AnimationController animationController;
   late var colorTween;
+
+  SnackBar showStatus ({required Color color, required String text}) {
+    return SnackBar(
+      content: Text("Patient $text"),
+      backgroundColor: color,
+      padding: const EdgeInsets.all(15),
+      behavior: SnackBarBehavior.fixed,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    );
+  }
+
+
+  deleteStatus(int id) async{
+    int status = await QueryBuilder.instance.deletePatient(id);
+
+    if(status == 0) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+        showStatus(color: Colors.redAccent, text: "Deleted"));
+  }
+
+  addStatus(Patient newPatient) async {
+    int status = await QueryBuilder.instance.addPatient(newPatient);
+
+    if(status == 0) {
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        showStatus(color: Colors.lightBlueAccent, text: "Added"));
+  }
 
   @override
   void initState() {
@@ -78,8 +113,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           //     );
           //   }
           if (snapshot.hasData) {
-
-
             // patientsList.isEmpty ? patientsList = snapshot.data! : null;
 
             return SlidableAutoCloseBehavior(
@@ -94,13 +127,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     itemBuilder: (context, index) {
 
                       final patient = snapshot.data![index];
-
-
+                      
                       return Card(
                         margin: const EdgeInsets.only(top: 1, bottom: 0.6),
                         child: Slidable(
                           key: UniqueKey(),
-                          endActionPane: const ActionPane(
+                          endActionPane: ActionPane(
                             motion: StretchMotion(),
                             children: [
                               SlidableAction(
@@ -115,11 +147,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
                                 label: "Delete",
-                                onPressed: null,
+                                onPressed: (context) => setState(() {
+                                  deleteStatus(patient.id!);
+                                }),
                               )
                             ],
                           ), child: ListTile(
-                            title: Text("${patient.name}"),
+                            title: Text(patient.name),
                             trailing: const Icon(Icons.arrow_back_ios),
                             onTap: () {
                               Navigator.push(context,
@@ -170,17 +204,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Patient newPatient = await Navigator.push(context,
+          var newPatient = await Navigator.push(context,
               MaterialPageRoute(
                 builder: (context) => PatientForm(listLength: patientsList.length),
               ));
           if (newPatient == null) {
             return;
           }
-
-          print('${newPatient.name} homepage');
-
-          await QueryBuilder.instance.addPatient(newPatient);
+          setState(() {
+            addStatus(newPatient);
+          });
 
         },
         child: const Icon(Icons.person_add_alt_sharp),
