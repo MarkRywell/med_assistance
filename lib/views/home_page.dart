@@ -203,33 +203,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               );
             }
 
-
-            // return Center(
-            //     child: Column(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         Container(
-            //           width: 100,
-            //           height: 100,
-            //           padding: const EdgeInsets.only(bottom: 10),
-            //           child: const Icon(Icons.error_outline,
-            //               size: 100,
-            //               color: Colors.redAccent
-            //           ),
-            //         ),
-            //         const Padding(
-            //           padding: EdgeInsets.all(20),
-            //           child: Text("Database Error: Problem Fetching Data",
-            //             textAlign: TextAlign.center,
-            //             style: TextStyle(
-            //                 height: 1.5,
-            //                 fontSize: 20
-            //             ),),
-            //         )
-            //       ],
-            //     )
-            // );
-
           }
           return Center(
               child: CircularProgressIndicator(
