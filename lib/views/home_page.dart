@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:med_assistance/models/patient.dart';
 import 'package:med_assistance/query_builder.dart';
@@ -143,8 +144,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             if (snapshot.hasData) {
 
               if(snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text("No Existing Patient")
+                return Center(
+                  child: Column(
+
+                    children: [
+                      Lottie.network('https://assets5.lottiefiles.com/packages/lf20_tutvdkg0.json'),
+                      
+                      const Text("No Existing Patient",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500
+                          ))
+                    ],
+                  )
                 );
               }
               else {
