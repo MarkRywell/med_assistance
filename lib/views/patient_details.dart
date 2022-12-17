@@ -55,7 +55,7 @@ class _PatientDetailsState extends State<PatientDetails> with SingleTickerProvid
                         height: size.height * 0.25,
                         width: size.width,
                         color: Colors.tealAccent.withOpacity(0.4),
-                        child: Lottie.network('https://assets8.lottiefiles.com/packages/lf20_vPnn3K.json')
+                        child: Lottie.asset('assets/cover.json')
                     ),
                      Positioned(
                         left: 10,
@@ -66,7 +66,7 @@ class _PatientDetailsState extends State<PatientDetails> with SingleTickerProvid
                           child: CircleAvatar(
                             radius: 75,
                             backgroundColor: Colors.tealAccent.withOpacity(0.8),
-                            child: Lottie.network('https://assets7.lottiefiles.com/packages/lf20_5aaicf2r.json',
+                            child: Lottie.asset('assets/profile.json',
                               fit: BoxFit.fill
                           ),
                           )

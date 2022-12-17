@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   child: Column(
 
                     children: [
-                      Lottie.network('https://assets5.lottiefiles.com/packages/lf20_tutvdkg0.json'),
+                      Lottie.asset('assets/message.json'),
                       
                       const Text("No Existing Patient",
                           style: TextStyle(
