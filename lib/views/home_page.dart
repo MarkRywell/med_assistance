@@ -142,65 +142,72 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             }
             if (snapshot.hasData) {
 
-              patientsList.isEmpty ? patientsList = snapshot.data! : null;
+              if(snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text("No Existing Patient")
+                );
+              }
+              else {
+                patientsList.isEmpty ? patientsList = snapshot.data! : null;
 
-              return SlidableAutoCloseBehavior(
-                closeWhenOpened: true,
-                child: Scrollbar(
-                  trackVisibility: true,
-                  interactive: true,
-                  thickness: 8.0,
-                  radius: const Radius.circular(5),
-                  child: ListView.builder(
-                      itemCount: patientsList.length,
-                      itemBuilder: (context, index) {
-                        final patient = patientsList[index];
+                return SlidableAutoCloseBehavior(
+                  closeWhenOpened: true,
+                  child: Scrollbar(
+                    trackVisibility: true,
+                    interactive: true,
+                    thickness: 8.0,
+                    radius: const Radius.circular(5),
+                    child: ListView.builder(
+                        itemCount: patientsList.length,
+                        itemBuilder: (context, index) {
+                          final patient = patientsList[index];
 
-                        return Card(
-                          margin: const EdgeInsets.only(top: 1, bottom: 0.6),
-                          child: Slidable(
-                            key: UniqueKey(),
-                            endActionPane: ActionPane(
-                              motion: const StretchMotion(),
-                              children: [
-                                SlidableAction(
-                                  icon: Icons.mode_edit_outlined,
-                                  backgroundColor: Colors.green,
-                                  foregroundColor: Colors.white,
-                                  label: "Update",
-                                  onPressed: (context) =>
+                          return Card(
+                            margin: const EdgeInsets.only(top: 1, bottom: 0.6),
+                            child: Slidable(
+                              key: UniqueKey(),
+                              endActionPane: ActionPane(
+                                motion: const StretchMotion(),
+                                children: [
+                                  SlidableAction(
+                                      icon: Icons.mode_edit_outlined,
+                                      backgroundColor: Colors.green,
+                                      foregroundColor: Colors.white,
+                                      label: "Update",
+                                      onPressed: (context) =>
+                                          setState(() {
+                                            updateStatus(patient, index);
+                                          })
+                                  ),
+                                  SlidableAction(
+                                      icon: Icons.delete,
+                                      backgroundColor: Colors.red,
+                                      foregroundColor: Colors.white,
+                                      label: "Delete",
+                                      onPressed: (context) {
+                                        deleteStatus(patient.id!);
                                         setState(() {
-                                          updateStatus(patient, index);
-                                        })
-                                ),
-                                SlidableAction(
-                                  icon: Icons.delete,
-                                  backgroundColor: Colors.red,
-                                  foregroundColor: Colors.white,
-                                  label: "Delete",
-                                  onPressed: (context) {
-                                    deleteStatus(patient.id!);
-                                    setState(() {
-                                      patientsList.removeAt(index);
-                                    });
-                                  }
-                                )
-                              ],
-                            ), child: ListTile(
-                              title: Text(patient.name),
-                              trailing: const Icon(Icons.arrow_back_ios),
-                              onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PatientDetails(patient: patient)
-                                    ));
-                              }
-                          ),
-                          ),
-                        );
-                      }),
-                ),
-              );
+                                          patientsList.removeAt(index);
+                                        });
+                                      }
+                                  )
+                                ],
+                              ), child: ListTile(
+                                title: Text(patient.name),
+                                trailing: const Icon(Icons.arrow_back_ios),
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(
+                                          builder: (context) => PatientDetails(patient: patient)
+                                      ));
+                                }
+                            ),
+                            ),
+                          );
+                        }),
+                  ),
+                );
+              }
             }
 
           }
