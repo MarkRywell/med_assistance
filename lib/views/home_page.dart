@@ -23,15 +23,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   late AnimationController animationController;
   late var colorTween;
 
-  SnackBar showStatus ({required Color color, required String text}) {
-    return SnackBar(
-      content: Text("Patient $text"),
-      backgroundColor: color,
-      padding: const EdgeInsets.all(15),
-      behavior: SnackBarBehavior.fixed,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+  showStatus({required Color color, required String text}) {
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text("Patient $text"),
+            backgroundColor: color,
+            padding: const EdgeInsets.all(15),
+            behavior: SnackBarBehavior.fixed,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            )
+        )
     );
   }
 
@@ -42,8 +45,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     if(status == 0) {
       return;
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-        showStatus(color: Colors.redAccent, text: "Deleted"));
+    showStatus(color: Colors.redAccent, text: "Deleted");
   }
 
   addStatus(Patient newPatient) async {
@@ -59,15 +61,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       patientsList.add(fetchedPatient);
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        showStatus(color: Colors.lightBlueAccent, text: "Added"));
+    showStatus(color: Colors.lightBlueAccent, text: "Added");
   }
 
   updateStatus(Patient patient, int index) async {
     var updatedPatient = await Navigator.push(context,
-    MaterialPageRoute(
-      builder: (context) => UpdateForm(patient: patient)
-    ));
+        MaterialPageRoute(
+            builder: (context) => UpdateForm(patient: patient)
+        ));
 
     if (updatedPatient == null){
       return;
@@ -83,8 +84,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       patientsList[index] = updatedPatient;
     });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        showStatus(color: Colors.greenAccent, text: "Updated"));
+
+    showStatus(color: Colors.greenAccent, text: "Updated");
   }
 
   @override
@@ -145,18 +146,18 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
               if(snapshot.data!.isEmpty) {
                 return Center(
-                  child: Column(
+                    child: Column(
 
-                    children: [
-                      Lottie.asset('assets/message.json'),
-                      
-                      const Text("No Existing Patient",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500
-                          ))
-                    ],
-                  )
+                      children: [
+                        Lottie.asset('assets/message.json'),
+
+                        const Text("No Existing Patient",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500
+                            ))
+                      ],
+                    )
                 );
               }
               else {
