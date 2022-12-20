@@ -107,6 +107,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Medicine Assistance"),
@@ -146,22 +149,25 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             if (snapshot.hasData) {
 
               if(snapshot.data!.isEmpty) {
-                return Center(
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Lottie.asset('assets/message.json'),
-                        ),
 
-                        const Text("No Existing Patient",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500
-                            ))
-                      ],
-                    )
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: size.height * 0.5,
+                        margin: const EdgeInsets.only(top: 50),
+                        child: Lottie.asset('assets/message.json'),
+                      ),
+
+                      const Text("No Existing Patient",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500
+                          ))
+                    ],
+                  )
                 );
+
               }
               else {
                 patientsList.isEmpty ? patientsList = snapshot.data! : null;
