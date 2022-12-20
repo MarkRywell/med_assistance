@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   List patientsList = [];
 
   late AnimationController animationController;
+  // ignore: prefer_typing_uninitialized_variables
   late var colorTween;
 
   showStatus({required Color color, required String text}) {
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
 
-  deleteStatus(int id) async{
+  deleteStatus(int id) async {
     int status = await QueryBuilder.instance.deletePatient(id);
 
     if(status == 0) {
@@ -147,9 +148,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               if(snapshot.data!.isEmpty) {
                 return Center(
                     child: Column(
-
                       children: [
-                        Lottie.asset('assets/message.json'),
+                        Container(
+                          margin: const EdgeInsets.only(top: 50),
+                          child: Lottie.asset('assets/message.json'),
+                        ),
 
                         const Text("No Existing Patient",
                             style: TextStyle(
