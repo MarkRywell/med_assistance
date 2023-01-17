@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     );
   }
 
-
   deleteStatus(int id) async {
     int status = await QueryBuilder.instance.deletePatient(id);
 
@@ -231,7 +230,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 );
               }
             }
-
           }
           return Center(
               child: CircularProgressIndicator(

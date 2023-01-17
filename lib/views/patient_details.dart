@@ -46,49 +46,49 @@ class _PatientDetailsState extends State<PatientDetails> with SingleTickerProvid
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              Container(
                 height: size.height * 0.3,
                 child: Stack(
                   children: [
                     Container(
-                        height: size.height * 0.25,
+                        height: size.height * 0.20,
                         width: size.width,
                         color: Colors.tealAccent.withOpacity(0.4),
                         child: Lottie.asset('assets/cover.json')
                     ),
-                     Positioned(
+                    Positioned(
                         left: 10,
                         bottom: 10,
                         child: CircleAvatar(
-                          radius: 80,
-                          backgroundColor: Colors.white,
-                          child: CircleAvatar(
-                            radius: 75,
-                            backgroundColor: Colors.tealAccent.withOpacity(0.8),
-                            child: Lottie.asset('assets/profile.json',
-                              fit: BoxFit.fill
-                          ),
-                          )
+                            radius: 80,
+                            backgroundColor: Colors.white,
+                            child: CircleAvatar(
+                              radius: 75,
+                              backgroundColor: Colors.tealAccent.withOpacity(0.8),
+                              child: Lottie.asset('assets/profile.json',
+                                  fit: BoxFit.fill
+                              ),
+                            )
+                        )
+                    ),
+                    Positioned(
+                        left: 180,
+                        bottom: 20,
+                        child: SizedBox(
+                          width: size.width * 0.4,
+                          height: 50,
+                            child: Text(widget.patient.name,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold
+                                )),
                         )
                     )
                   ],
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                      width: size.width,
-                      child: Text(widget.patient.name,
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                          )),
-                    ),
-                  ),
-                ],
-              ),
+
               const Divider(
                 thickness: 10,
                 color: Colors.grey,
@@ -105,8 +105,8 @@ class _PatientDetailsState extends State<PatientDetails> with SingleTickerProvid
                       indicatorSize: TabBarIndicatorSize.tab,
 
                       indicator: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.teal[100]
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.teal[100]
                       ),
 
                       tabs: const [
@@ -118,8 +118,8 @@ class _PatientDetailsState extends State<PatientDetails> with SingleTickerProvid
               ),
               const Divider(thickness: 1),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                height: size.height * 0.3,
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  height: size.height * 0.3,
                   child: TabBarView(
                     controller: tabController,
                     children: [

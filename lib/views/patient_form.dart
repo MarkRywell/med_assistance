@@ -17,8 +17,8 @@ class _PatientFormState extends State<PatientForm> {
   var formKey = GlobalKey<FormState>();
 
   DateTime date = DateTime.now();
+  String? sex;
 
-  TextEditingController idController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController ageController = TextEditingController();
 
@@ -55,19 +55,46 @@ class _PatientFormState extends State<PatientForm> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                      child: TextFormField(
-                        controller: ageController,
-                        keyboardType: TextInputType.text,
-                        decoration: const InputDecoration(
-                            labelText: "Age",
-                            border: OutlineInputBorder()
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            child: TextFormField(
+                              controller: ageController,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                  labelText: "Age",
+                                  border: OutlineInputBorder()
+                              ),
+                              validator: (value) {
+                                return value == null || value.isEmpty ? "Enter patient's age" : null;
+                              },
+                            ),
+                          ),
                         ),
-                        validator: (value) {
-                          return value == null || value.isEmpty ? "Enter patient's age" : null;
-                        },
-                      ),
+
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                            child: DropdownButtonFormField(
+                              hint: const Text("Sex at Birth: "),
+                              items: const [
+                                DropdownMenuItem(
+                                    value: "Female",
+                                    child: Text("Female")),
+                                DropdownMenuItem(
+                                    value: "Male",
+                                    child: Text("Male")),
+                              ],
+                              onChanged: (value) {
+                                sex = value!;
+                              },
+                            )
+                          ),
+                        )
+                      ],
                     ),
 
                     //DATE PICKER HERE

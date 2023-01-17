@@ -30,7 +30,7 @@ class QueryBuilder {
   Future onCreate(Database db, int version) async {
     await db.execute('''      
         CREATE TABLE patients(id INTEGER PRIMARY KEY,
-         name TEXT, age INTEGER, dateAdmitted TEXT, diseaseDetails TEXT,
+         name TEXT, age INTEGER, sex TEXT,dateAdmitted TEXT, diseaseDetails TEXT,
          medicines TEXT)      
     ''');
   }
